@@ -1,6 +1,8 @@
 ## Local Docker Registry with Native Basic Auth
 
-https://docs.docker.com/registry/deploying/
+###https://docs.docker.com/registry/deploying/
+
+###https://docs.docker.com/registry/spec/auth/token/
 
 
 
