@@ -4,7 +4,7 @@
 
 ###https://docs.docker.com/registry/spec/auth/token/
 
-
+###https://github.com/docker/distribution/blob/master/docs/deploying.md
 
 
 First create a password file with one entry for the user “testuser”, with password “testpassword”:
