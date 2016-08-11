@@ -1,0 +1,9 @@
+nginx:
+   image: "nginx:1.9"
+   ports;
+     - 5043:443
+   links:
+     - registry:registry
+   volumes:
+     - ./nginx/:/etc/nginx/conf.d:ro
+

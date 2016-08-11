@@ -1,0 +1,18 @@
+nginx:
+   image: "nginx:1.9"
+   ports:
+     - 5043:443
+   links:
+     - registry:registry
+   volumes:
+     - ./nginx/:/etc/nginx/conf.d:ro
+
+registry:
+    image: registry:2.5
+    ports:
+      - 127.0.0.1:5000:5000
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - ./data:/data
+
