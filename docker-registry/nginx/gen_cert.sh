@@ -1,5 +1,7 @@
 
 #https://www.digitalocean.com/community/tutorials/how-to-set-up-a-private-docker-registry-on-ubuntu-14-04
+#http://blog.csdn.net/wanglei_storage/article/details/51444432
+
 
 #create user and passwd
 htpasswd -c registry.passwd XXXXXXX
