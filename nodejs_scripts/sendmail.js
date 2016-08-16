@@ -30,6 +30,8 @@ transport.sendMail(mailOptions, function (error, info) {
         transport.close();
 });
 
+//https://howtonode.org/sending-e-mails-with-node-and-nodemailer
 
-
+//https://github.com/nodemailer/nodemailer
+//http://www.cnblogs.com/pingfan1990/p/4864822.html
 //http://www.nodejs.net/a/20130219/220632.html 
