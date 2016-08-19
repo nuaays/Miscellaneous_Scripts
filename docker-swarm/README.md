@@ -23,6 +23,9 @@ Swarm Node 2:
 	docker -H :4000 run hello-world 
 	docker -H :4000 ps -a 
 
+list node 
+	docker run --rm docker.io/swarm list consul://192.168.56.101:8500 
+
 删除Exited的容器 
 	docker -H :4000 ps -a | grep Exited | awk '{print $1}' | docker -H :4000 rm 
 
