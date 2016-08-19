@@ -29,3 +29,5 @@ Swarm Node 2:
 
 
 
+##High availability in Docker Swarm  
+https://docs.docker.com/swarm/multi-manager-setup/
