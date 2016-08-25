@@ -18,41 +18,65 @@ There are many other examples of cases when we need to store and retrieve (disco
 In order to be able to locate our services we need at least the following two processes to be available for us.
 	• Service registration process that will store, as a minimum, the host and the port service is running on.
 	• Service discovery process that will allow others to be able to discover the information we stored during the registration process.
+
+
 Besides those processes, we need to consider several other aspects. Should we unregister the service if it stops working and deploy/register a new instance? What happens when there are multiple copies of the same service? How do we balance the load among them? What happens if a server goes down? Those and many other questions are tightly related to the registration and discovery processes. For now, we’ll limit the scope only to the service discovery (common name that envelops both aforementioned processes) and the tools we might use for such a task. Most of them feature some kind of highly available distributed key/value storage.
+
 Service discovery tools
 The main objective of service discovery tools is to help services find and talk to one another. In order to perform their duty they need to know where each service is. The concept is not new and many tools existed long before Docker was born. However, containers brought the need for such tools to a completely new level.
 The basic idea behind service discovery is for each new instance of a service (or an application) to be able to identify its current environment and store that information. Storage itself is performed in a registry usually in key/value format. Since the discovery is often used in distributed system, registry needs to be scalable, fault tolerant and distributed among all nodes in the cluster. Primary usage of such a storage is to provide, as a minimum, IP and port of the service to all interested parties that might need to communicate with it. This data is often extended with other types of information.
+
 Discovery tools tend to provide some kind of API that can be used by a service to register itself as well as by others to find the information about that service.
 Let’s say that we have two services. One is a provider and the other one is its consumer. Once we deploy the provider we need to store its information to the service discovery registry of choice. Later on, when the consumer tries to access the provider, it would first query the registry and call the provider using the IP and port obtained from the registry. In order to decouple the provider from the specific implementation of the registry, we often employ some kind of proxy service. That way the consumer would always request information from the fixed address that would reside inside the proxy that, in turn, would use the discovery service to find out the provider information and redirect the request. We’ll go through reverse proxy later on in the book. For now it is important to understand the flow that is based on three actors; consumer, proxy and provider.
+
 What we are looking for in the service discovery tools is data. As a minimum we should be able to find out where the service is, whether it is healthy and available and what is its configuration. Since we are building a distributed system with multiple servers, the tool needs to be robust and failure of one node should not jeopardize data. Also, each of the nodes should have exactly the same data replica. Further on, we want to be able to start services in any order, be able to destroy them or replace them with newer versions. We should also be able to reconfigure our services and see the data change accordingly.
+
 Let’s take a look at few of the commonly used options to accomplish the goals we set.
 Manual configuration
 Most of the services are still managed manually. We decide in advance where to deploy the service, what is its configuration and hope beyond reason that it will continue working properly until the end of days. Such approach is not easily scalable. Deploying a second instance of the service means that we need to start the manual process all over. We need to bring up a new server or find out which one has low utilization of resources, create a new set of configurations and deploy it. The situation is even more complicated in case of, let’s say, a hardware failure since the reaction time is usually slow when things are managed manually. Visibility is another painful point. We know what the static configuration is. After all, we prepared it in advance. However, most of the services have a lot of information generated dynamically. That information is not easily visible. There is no single location we can consult when we are in need of that data.
 Reaction time is inevitably slow, failure resilience questionable at best and monitoring difficult to manage due to a lot of manually handled moving parts.
 While there was excuse to do this job manually in the past or when the number of services and/or servers is low, with emergence of service discovery tools, this excuse quickly evaporates.
+
 Zookeeper
 ZooKeeper is one of the oldest projects of this type. It originated out of the Hadoop world, where it was built to help in the maintenance of the various components in a Hadoop cluster. It is mature, reliable and used by many big companies (YouTube, eBay, Yahoo, and so on). The format of the data it stores is similar to the organization of the file system. If run on a server cluster, Zookeper will share the state of the configuration across all of nodes. Each cluster elects a leader and clients can connect to any of the servers to retrieve data.
 The main advantages Zookeeper brings to the table is its maturity, robustness and feature richness. However, it comes with its own set of disadvantages as well, with Java and complexity being main culprits. While Java is great for many use cases, it is very heavy for this type of work. Zookeeper’s usage of Java together with a considerable number of dependencies makes it much more resource hungry that its competition. On top of those problems, Zookeeper is complex. Maintaining it requires considerably more knowledge than we should expect from an application of this type. This is the part where feature richness converts itself from an advantage to a liability. The more features an application has, the bigger the chances that we won’t need all of them. Thus, we end up paying the price in form of complexity for something we do not fully need.
 Zookeeper paved the way that others followed with considerable improvements. “Big players” are using it because there were no better alternatives at the time. Today, Zookeeper it shows its age and we are better off with alternatives.
+
+
 etcd
 etcd is a key/value store accessible through HTTP. It is distributed and features hierarchical configuration system that can be used to build service discovery. It is very easy to deploy, setup and use, provides reliable data persistence, it’s secure and with a very good documentation.
 etcd is a better option than Zookeeper due to its simplicity. However, it needs to be combined with few third-party tools before it can serve service discovery objectives.
 
 Now that we have a place to store the information related to our services, we need a tool that will send that information to etcd automatically. After all, why would we put data to etcd manually if that can be done automatically. Even if we would want to manually put the information to etcd, we often don’t know what that information is. Remember, services might be deployed to a server with least containers running and it might have a random port assigned. Ideally, that tool should monitor Docker on all nodes and update etcd whenever a new container is run or an existing one is stopped. One of the tools that can help us with this goal is Registrator.
+
 Registrator
 Registrator automatically registers and deregisters services by inspecting containers as they are brought online or stopped. It currently supports etcd, Consul and SkyDNS 2.
 Registrator combined with etcd is a powerful, yet simple combination that allows us to practice many advanced techniques. Whenever we bring up a container, all the data will be stored in etcd and propagated to all nodes in the cluster. What we’ll do with that information is up to us.
 
 There is one more piece of the puzzle missing. We need a way to create configuration files with data stored in etcd as well as run some commands when those files are created.
+
+
 confd
 confd is a lightweight configuration management tool. Common usages are keeping configuration files up-to-date using data stored in etcd, consul and few other data registries. It can also be used to reload applications when configuration files change. In other words, we can use it as a way to reconfigure all the services with the information stored in etcd (or many other registries).
+confd是一个轻量级的配置管理工具。通常用法是通过存储在etcd/consul/或其他数据注册 中的数据保持配置文件最新
+它也被用来重新加载应用当配置文件变化时。换句话说，我们将使用它作为重新配置所有服务的一种方式。
 
 Final thoughts on etcd, Registrator and confd combination
 When etcd, Registrator and confd are combined we get a simple yet powerful way to automate all our service discovery and configuration needs. This combination also demonstrates effectiveness of having the right combination of “small” tools. Those three do exactly what we need them to do. Less than this and we would not be able to accomplish the goals set in front of us. If, on the other hand, they were designed with bigger scope in mind, we would introduce unnecessary complexity and overhead on server resources.
 Before we make the final verdict, let’s take a look at another combination of tools with similar goals. After all, we should never settle for some solution without investigating alternatives.
+当etcd/Registrator和confd在一起时，我们得到一个强大的自动化所有服务发现和配置需要。
+这个组合也展示了有效拥有正确组合的工具。
+这三个工具做了我们最需要做的事。
+
+
+
 Consul
 Consul is strongly consistent datastore that uses gossip to form dynamic clusters. It features hierarchical key/value store that can be used not only to store data but also to register watches that can be used for a variety of tasks from sending notifications about data changes to running health checks and custom commands depending on their output.
+Consul是一个强一致性数据存储，它使用gossip协议来组建动态集群。
+
 Unlike Zookeeper and etcd, Consul implements service discovery system embedded so there is no need to build your own or use a third-party one. This discovery includes, among other things, health checks of nodes and services running on top of them.
+和Zookeeper/etcd不同的是，Consul实施了服务发现系统以至于没必要去创建自己的或使用第三方的。这个发现包括 节点健康检查以及运行在其上的服务。
+
 ZooKeeper and etcd provide only a primitive K/V store and require that application developers build their own system to provide service discovery. Consul, on the other hand, provides a built in framework for service discovery. Clients only need to register services and perform discovery using the DNS or HTTP interface. The other two tools require either a hand-made solution or the usage of third-party tools.
 Consul offers out of the box native support for multiple datacenters and the gossip system that works not only among nodes in the same cluster but across datacenters as well.
 
