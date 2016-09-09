@@ -1,0 +1,1 @@
+curl --http1.0 --request POST --header "Content-Type: application.json" http://$DOCKER_HOST:4243/containers/create?name=your-name --data @create.json
