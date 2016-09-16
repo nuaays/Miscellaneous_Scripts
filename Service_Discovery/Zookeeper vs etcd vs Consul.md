@@ -79,8 +79,14 @@ Unlike Zookeeper and etcd, Consul implements service discovery system embedded s
 
 ZooKeeper and etcd provide only a primitive K/V store and require that application developers build their own system to provide service discovery. Consul, on the other hand, provides a built in framework for service discovery. Clients only need to register services and perform discovery using the DNS or HTTP interface. The other two tools require either a hand-made solution or the usage of third-party tools.
 Consul offers out of the box native support for multiple datacenters and the gossip system that works not only among nodes in the same cluster but across datacenters as well.
+Zookeeper 和 etcd 只提供了原生的K/V存储 且 需要应用开发者创建自己的系统来提供服务发现。 而Consul提供了一个内置的服务发现框架。客户端只需要注册服务到consul并使用DNS或HTTP接口执行发现。
+Zookeeper和etcd则需要手动创建解决方案或者使用第三方工具来实现。
+Consul原生支持多数据中心，gossip系统不仅在同集群节点间可以工作，跨数据中心也是OK的。
 
 Consul has another nice feature that distinguishes it from the others. Not only that it can be used to discover information about deployed services and nodes they reside on, but it also provides easy to extend health checks through HTTP requests, TTLs (time-to-live) and custom commands.
+Consul还有另外一个独有的特性。它不仅可以用来做部署服务的发现，它也土工了已于拓展 基于HTTP请求的健康检查(health check)、TTLs和自定义命令。
+
+
 Registrator
 Registrator has two Consul protocols. The consulkv protocol produces similar results as those obtained with the etcd protocol.
 Besides the IP and the port that is normally stored with etcd or consulkv protocols, Registrator’s consul protocol stored more information. We get the information about the node the service is running on as well as service ID and name. With few additional environment variables we can also store additional information in form of tags
