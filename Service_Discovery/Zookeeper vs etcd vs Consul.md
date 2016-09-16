@@ -52,6 +52,8 @@ Now that we have a place to store the information related to our services, we ne
 Registrator
 Registrator automatically registers and deregisters services by inspecting containers as they are brought online or stopped. It currently supports etcd, Consul and SkyDNS 2.
 Registrator combined with etcd is a powerful, yet simple combination that allows us to practice many advanced techniques. Whenever we bring up a container, all the data will be stored in etcd and propagated to all nodes in the cluster. What we’ll do with that information is up to us.
+Registrator 通检测容器的启动或停止 自动注册/取消注册 服务。它限制很好地支持etcd、Consul和SkyDNS2
+Registrator和etcd是一对简单、强大的组合，它可以让我们实践很多先进技术。
 
 There is one more piece of the puzzle missing. We need a way to create configuration files with data stored in etcd as well as run some commands when those files are created.
 
