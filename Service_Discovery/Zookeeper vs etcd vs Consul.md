@@ -28,6 +28,10 @@ The basic idea behind service discovery is for each new instance of a service 
 
 Discovery tools tend to provide some kind of API that can be used by a service to register itself as well as by others to find the information about that service.
 Let’s say that we have two services. One is a provider and the other one is its consumer. Once we deploy the provider we need to store its information to the service discovery registry of choice. Later on, when the consumer tries to access the provider, it would first query the registry and call the provider using the IP and port obtained from the registry. In order to decouple the provider from the specific implementation of the registry, we often employ some kind of proxy service. That way the consumer would always request information from the fixed address that would reside inside the proxy that, in turn, would use the discovery service to find out the provider information and redirect the request. We’ll go through reverse proxy later on in the book. For now it is important to understand the flow that is based on three actors; consumer, proxy and provider.
+服务发现工作趋向于提供某种API可以被服务用来注册或被发现。
+比如我们有两个服务，一个是提供者另一个是消费者。一单我们部署了服务提供者，我们需要存储它的信息到所选择的服务发现注册中心。之后，当消费者尝试连接服务提供者，它将首先到注册中心查询到服务提供者并通过它的IP地址和端口调用。为了从特定的注册服务中心解耦提供者，我们经常应用某种代理服务。这样消费者可以一直从固定地址的代理 请求服务提供者的信息，反过来，代理也从服务发现中心找到服务提供者的信息并将请求转发给它。
+我们之后将了解反向代理。从现在开始理解基于 消费者、代理、服务提供者 的服务流程 是非常重要的。
+
 
 What we are looking for in the service discovery tools is data. As a minimum we should be able to find out where the service is, whether it is healthy and available and what is its configuration. Since we are building a distributed system with multiple servers, the tool needs to be robust and failure of one node should not jeopardize data. Also, each of the nodes should have exactly the same data replica. Further on, we want to be able to start services in any order, be able to destroy them or replace them with newer versions. We should also be able to reconfigure our services and see the data change accordingly.
 
