@@ -34,6 +34,8 @@ Let’s say that we have two services. One is a provider and the other one is it
 
 
 What we are looking for in the service discovery tools is data. As a minimum we should be able to find out where the service is, whether it is healthy and available and what is its configuration. Since we are building a distributed system with multiple servers, the tool needs to be robust and failure of one node should not jeopardize data. Also, each of the nodes should have exactly the same data replica. Further on, we want to be able to start services in any order, be able to destroy them or replace them with newer versions. We should also be able to reconfigure our services and see the data change accordingly.
+在服务发现工具中我们所寻找的是数据。至少，我们应该能够找出服务在哪里，它是否健康可用以及配置是什么。 自从我们创建一个多主机的分布式系统，服务发现工具就需要鲁棒并且单点失败不应损害数据。同时，每个节点应当有最够的数据冗余。
+再将来，我们想能够以任意顺序启动服务，能够销毁它们或用新的版本替代它们。我们应当也能够重新配置服务并能看到数据相应的变化。
 
 Let’s take a look at few of the commonly used options to accomplish the goals we set.
 Manual configuration
@@ -50,8 +52,12 @@ Zookeeper paved the way that others followed with considerable improvements. “
 etcd
 etcd is a key/value store accessible through HTTP. It is distributed and features hierarchical configuration system that can be used to build service discovery. It is very easy to deploy, setup and use, provides reliable data persistence, it’s secure and with a very good documentation.
 etcd is a better option than Zookeeper due to its simplicity. However, it needs to be combined with few third-party tools before it can serve service discovery objectives.
+etcd是一个键值存储，可以通过HTTP访问，它是一个分布式的按特性分级配置系统，可以用来做服务发现。非常容易部署、安装和使用，并提供可信的数据持久化，安全，文档也好。
 
 Now that we have a place to store the information related to our services, we need a tool that will send that information to etcd automatically. After all, why would we put data to etcd manually if that can be done automatically. Even if we would want to manually put the information to etcd, we often don’t know what that information is. Remember, services might be deployed to a server with least containers running and it might have a random port assigned. Ideally, that tool should monitor Docker on all nodes and update etcd whenever a new container is run or an existing one is stopped. One of the tools that can help us with this goal is Registrator.
+现在我们有一个地方可以存储服务相关信息， 我们需要一个工具可以自动地发送信息到etcd。
+记住， 服务可能被部署到一个服务器以最少的容器运行并可能有一个随机端口分配。
+理想地，工具应该监控所有主机上的Docker并在容器运行或停止时更新etcd。这些工具中能够帮助我们达到这个目标的是Registrator.
 
 Registrator
 Registrator automatically registers and deregisters services by inspecting containers as they are brought online or stopped. It currently supports etcd, Consul and SkyDNS 2.
