@@ -82,3 +82,52 @@ test()
 test = a_new_decorator(test)
 test()
 print test.__name__
+
+
+
+
+### Decorator used for logging
+#with parameter 
+# from functools import wraps
+# def logit(logfile="out.log"):
+# 	def logging_decorator(func):
+# 		@wraps(func)
+# 		def wrap_function(*args, **kwargs):
+# 			log_string = func.__name__ + " was called"
+# 			print log_string
+# 			with open(logfile, 'a') as f:
+# 				f.write(log_string)
+# 			#return func(*args, **kwargs)
+# 		return wrap_function
+# 	return logging_decorator
+
+
+# @logit
+# def func1():
+# 	pass
+
+# func1()
+
+# @logit(logfile="func2.log")
+# def func2():
+# 	pass
+# func2()
+
+
+### decorator class
+class logit(object):
+	def __init__(self, logfile='out.log'):
+		self.logfile  = logfile
+	def __call__(self, func):
+		log_string = func.__name__ + "was called"
+		print log_string
+		with open(self.logfile, 'a') as f:
+			f.write(log_string + "\n")
+		#
+		self.notify()
+	def notify(self):
+		pass
+
+@logit
+def myfunc1():
+	pass
