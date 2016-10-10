@@ -46,38 +46,23 @@ class sshConnect(object):
         self.root_prompt = '#'
 
         # Launch ssh connecting to host
-        self.connect()
+        # self.connect()
 
     def check_online(self):
-        pass
-        # print "[INFO] Checking Host %s is online or not ... ..." % self.host_ip
-        # ret = False
-        # try:
-        #     ret=subprocess.check_call('ping %s -n 4 ' % self.host_ip ,stdin = subprocess.PIPE, stdout= subprocess.PIPE, stderr=subprocess.STDOUT, shell = True)
-        # except Exception, e:
-        #     if ret != 0:
-        #         print "[INFO] %s is Offline" % self.host_ip
-        #         print e, ret
-        #         ret = False
-        #         return ret
-        # else:
-        #     print "[INFO] %s is Online" % self.host_ip
-        #     ret = True
-        # return ret
-
-        '''
-        info = exectue_external_cmd('ping %s -n %d' % (self.host_ip, self.ping_times) )
-        if re.findall(self.host_ping_online_pattern, str(info), re.MULTILINE):
-            print "[INFO] %s is online, network is OK" % self.host_ip
-            return True
-        else:
-            print "[Warning] Failed to ping %s, seems it's offline!!!" % self.host_ip
+        print "[INFO] Checking Host %s is online or not ... ..." % self.host_ip
+        try:
+            subprocess.check_call('ping %s -c %d -w %d' % (self.host_ip, self.ping_times, self.ping_timeout) , stdin = subprocess.PIPE, stdout= subprocess.PIPE, stderr=subprocess.STDOUT, shell = True)
+        except Exception, e:
+            print "[INFO] %s is Offline" % self.host_ip
+            print e
             return False
-        '''
+        else:
+            print "[INFO] %s is Online" % self.host_ip
+            return True
 
     def connect(self):
-        #if not self.check_online():
-        #    raise Exception("SSH Error As to Target is Offline!!!")
+        if not self.check_online():
+            raise Exception("SSH Error As to Target is Offline!!!")
         self.channel = paramiko.SSHClient()
         self.channel.load_system_host_keys()
         self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -302,6 +287,9 @@ def test_prd():
 
 def test_test():
     t = sshConnect('root', '****', '10.253.*.***', 22)
+    if not t.check_online():
+       return False
+    t.connect()
     t.exectueCommand(["whoami"],verbose=True)
     #t.exectueCommand(["docker ps"],verbose=True)
     t.sudoExectueCommand(["docker ps","whoami"],verbose=True)
