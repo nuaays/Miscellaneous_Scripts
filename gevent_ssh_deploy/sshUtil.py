@@ -1,0 +1,293 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Author: Yang Sen
+# Date: 2016-10-10
+
+#
+#
+import os, sys, time, datetime, subprocess, re
+sys.path.append( os.path.dirname( os.path.abspath(__file__) ) )
+import Crypto, paramiko
+
+#
+auth = {
+    "test": ["root", "###"],
+    "pre": ["admin", "####"],
+    "prd": ["root", "####"],
+}
+
+
+def exectue_external_cmd( cmd,  msg_in='' ):
+    proc = subprocess.Popen( cmd,  shell = True,  stdin = subprocess.PIPE,  stdout = subprocess.PIPE,  stderr = subprocess.PIPE)
+    stdout_info,  stderr_info = proc.communicate( msg_in)
+    return stdout_info #,  stderr_info
+
+class sshConnect(object):
+    def __init__(self, usrName, passWd, host, port=22, rootName='root', rootPassWord='123', logfile = "paramiko_ssh.log"):
+        self.Flag = '=';
+        self.numofFlag= 102;
+        self.logfile  = logfile #self.logfile = os.path.join(os.getcwd(),"paramiko.log")
+        self.username = usrName
+        self.password = passWd
+        self.rootname = rootName
+        self.rootpswd = rootPassWord
+        self.host_ip  = host
+        self.host_port= port
+        self.host_ping_online_pattern = 'Lost = 0 \(0% loss\)'
+        self.ping_times = 3
+        self.ping_timeout = 3
+        #
+        self.send_cmd_timeout = 2
+        #
+        self.channel = None
+        self.sftp = None
+        self.rootshell = None
+        #inter
+        self.prompt = '$'
+        self.root_prompt = '#'
+
+        # Launch ssh connection
+        if not self.connect():
+           return None
+
+    def check_online(self):
+        #r=pyping.ping('*.*.*.*', timeout=3, count=3, packet_size=55, own_id=None, quiet_output=False, udp=False)
+        print "[INFO] Checking Host %s is online or not ... ..." % self.host_ip
+        try:
+            subprocess.check_call('ping %s -c %d -w %d' % (self.host_ip, self.ping_times, self.ping_timeout) , stdin = subprocess.PIPE, stdout= subprocess.PIPE, stderr=subprocess.STDOUT, shell = True)
+        except Exception, e:
+            print "[INFO] %s is Offline" % self.host_ip
+            print e
+            return False
+        else:
+            print "[INFO] %s is Online" % self.host_ip
+            return True
+
+    def connect(self):
+        if not self.check_online():
+            raise Exception("[ERROR] Connection Error Due to Target is Offline!!!")
+        self.channel = paramiko.SSHClient()
+        self.channel.load_system_host_keys()
+        self.channel.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        try:
+            self.channel.connect( self.host_ip, self.host_port, username = self.username, password= self.password, pkey=None, timeout=None, allow_agent=False, look_for_keys=False)
+        except Exception, e:
+            print "Failed to SSH Host %s : " % self.host_ip, e
+            return False
+        else:
+            #self.sftp = paramiko.SFTPClient.from_transport(self.channel)
+            self.sftp = self.channel.open_sftp()
+        return True
+
+    def is_active(self):
+        is_active = False
+        if self.channel != None:
+            try:
+                trans = self.channel.get_transport()
+                if trans.is_active():
+                    is_active = True
+            except:
+                is_active = False
+        return is_active
+
+    def su_root(self):
+        '''         http://www.jb51.net/article/44070.htm '''
+        if self.rootshell == None:
+            self.rootshell = self.channel.invoke_shell()
+            time.sleep(0.5)
+        if self.username == 'root':
+           print "Already root account!"
+           return True
+        # su to root account
+        # self.rootshell.send( 'su %s\n' % self.rootname )
+        self.rootshell.send( 'sudo -i\n' )
+        # wait to input password
+        buff = ''
+        while not buff.endswith(': '):
+            resp = self.rootshell.recv(65535)
+            buff +=resp
+        self.rootshell.send( '%s\n' % self.password )
+        # wait login into root account
+        while not buff.endswith( '%s ' % self.root_prompt ):
+            resp = self.rootshell.recv(65535)
+            buff +=resp
+        if self.rootshell.send_ready():
+            print "[INFO] Su to root account successfully!"
+            return True
+        else:
+            print "[ERROR] Su to root account Failed!!!"
+            return False
+
+    def reboot(self, rebootcmd='reboot -n -f'):
+        if self.rootshell == None:
+            self.su_root()
+        print "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+        print "Rebooting Host: %s , Command is: %s " % ( self.host_ip,rebootcmd )
+        print "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+        self.rootshell.send( rebootcmd )
+        self.rootshell.send('\n')
+        start_time = datetime.datetime.now()
+        print "... ... ... ... ... ... ... ..."
+        time.sleep(30)
+        self.close()
+
+        res = False
+        for i in range(10):
+            res = self.check_online()
+            print "... ... ... ... ... ... ... ..."
+            time.sleep(10)
+            if res:
+                res = True
+                now_time = datetime.datetime.now()
+                print "[INFO] Reboot Used: %d s" % (now_time - start_time).seconds
+                return res
+            else:
+                continue
+        return res
+
+    def send_cmd(self, cmd_list, timeout=2 ):
+        ssh_stdin, ssh_stdout, ssh_stderr = self.channel.exec_command(cmd_list)
+        ssh_stdin.write('\n')
+        ssh_stdin.flush()
+        output = ssh_stdout.read()
+        return output
+
+    def sudoExectueCommand(self, cmdList, verbose=False):
+        if len(cmdList) == 0:
+            return
+        if self.rootshell == None:
+            self.su_root()
+
+        for cmd in cmdList:
+            while not self.rootshell.send_ready():
+                time.sleep(1)
+            print "[Commands] %s" % cmd
+            self.rootshell.send( cmd )
+            self.rootshell.send('\r')
+            buff = ''
+            while not buff.endswith('%s ' % self.root_prompt):
+                resp = self.rootshell.recv(9999)
+                buff +=resp
+            print "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+            print buff
+            print "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
+        return buff
+
+    def exectueCommand(self, cmdList, verbose=False):
+        if len(cmdList) == 0:
+            return
+        #startTimeStamp = time.time()
+        fh = open(self.logfile, 'a+')
+        print self.Flag*self.numofFlag
+        for cmd in cmdList:
+            if verbose:
+                #print self.Flag*self.numofFlag
+                print "[Commands] %s" % cmd
+                #for subcmd in cmd.split(";"):
+                #    print subcmd
+                #print self.Flag*self.numofFlag
+            fh.write(self.Flag*self.numofFlag + "\n")
+            fh.write("\nExectuing Command: %s\n" % cmd)
+
+            stdin,stdout,stderr = self.channel.exec_command(cmd)
+            out = stdout.readlines()
+            if verbose:
+                for i in out:
+                    print i.rstrip()
+                    fh.write(i)
+                print self.Flag*self.numofFlag
+        fh.close()
+        #print "Used Time:", time.time() - startTimeStamp, "s"
+
+    def upload(self, localFile, remoteFile, verbose=False ):
+        #startTimeStamp = time.time()
+        #print "[Upload] Uploading LocalFile=",localFile," To RemoteFile=",remoteFile
+        print "[Upload] Uploading LocalFile=%-90s To RemoteFile=%-80s " % (localFile,remoteFile)
+        if verbose:
+            self.sftp.put(localFile, remoteFile, self._callback)
+        else:
+            self.sftp.put(localFile, remoteFile)
+        #print "Used Time:", time.time() - startTimeStamp, "s"
+
+    #sftp.get(remotepath, localpath)
+    def download(self, remoteFile, localFile, verbose=False):
+        print "[DownLoad] Downloading RemoteFile=",remoteFile," To LocalFile=",localFile
+        #startTimeStamp = time.time()
+        if verbose:
+            self.sftp.get(remoteFile, localFile, self._callback)
+        else:
+            self.sftp.get(remoteFile, localFile)
+        #print "Used Time:", time.time() - startTimeStamp, "s"
+
+    def _callback(self,a,b):
+        if (int(a*100./b) % 10 == 0 and int(a*1000/b) % 10 < 2):
+            sys.stdout.write('|%-40s| %.2f M [%3.2f%%]\r' %('>'*int(a*40./b), a/1024./1024.,a*100./int(b)))
+            sys.stdout.flush()
+
+    def close(self):
+        #if self.channel.is_active():
+        self.sftp.close
+        self.channel.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, tb):
+        self.sftp.close
+        self.channel.close()
+        self.rootshell.close()
+
+def test(HostIp):
+    CurrentPath=os.path.dirname(os.path.realpath(__file__))
+    Commands = ['pwd','who|grep nodeb','free|grep Mem']
+    t = sshConnect('root','####',HostIp,22)
+    #print t.is_active()
+    #print t.create_shell()
+    #print t.send_cmd('free|grep Mem;users;whoami')
+
+    #t.reboot()
+    #self.expect(["SDCxM-SDCAM-1-root"])
+    t.exectueCommand(["whoami"],verbose=True)
+    #t.su_root()
+    t.exectueCommand(["docker ps"],verbose=True)
+    #t.sudoExectueCommand(["whoami;pwd","uptime","ifconfig","uname -a;users","which python;python -V"],verbose=True)
+    #t.sudoExectueCommand(["ls /store","ls -l /etc/ssh/sshd_config"],verbose=True)
+    t.upload(os.path.join(CurrentPath,"check.sh"), "/tmp/check.sh", verbose=True)
+
+    t.exectueCommand(["bash /tmp/check.sh"],verbose=True)
+    #if t.reboot():
+    #    print "[INFO]Reboot Successfully!"
+    #    t.exectueCommand(["whoami"],verbose=True)
+    #    t.exectueCommand(["uptime"],verbose=True)
+
+    #t.exectueCommand(Commands,verbose=True)
+    #t.download("/localdisk/ccc/Temp/moc.jpg",os.path.join(currentPath,"moc.jpg"))
+    t.close()
+
+
+def test_prd():
+    t = sshConnect('admin', '####', '*.*.*.*', 22)
+    t.exectueCommand(["whoami"],verbose=True)
+    t.upload("./check.sh", "/tmp/check.sh")
+    t.sudoExectueCommand(["docker ps","whoami", "bash /tmp/check.sh", "ip link"],verbose=True)
+    t.close()
+
+def test_test():
+    t = sshConnect('root', 'wjs!@#123', '10.253.6.128', 22)
+    t.exectueCommand(["whoami"],verbose=True)
+    t.upload("./check.sh", "/tmp/check.sh")
+    #t.exectueCommand(["docker ps"],verbose=True)
+    t.sudoExectueCommand(["docker ps","whoami"],verbose=True)
+    t.close()
+
+
+
+
+if __name__ == '__main__':
+    HostIp="10.253.14.238"
+    if len(sys.argv) > 1:
+       HostIp=sys.argv[1]
+
+    test_test()
+    #test_prd()
+    print "Over!"
