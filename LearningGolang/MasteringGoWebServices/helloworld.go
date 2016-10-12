@@ -31,7 +31,7 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 func main() {
 	gorillaRoute := mux.NewRouter()
 	//gorillaRoute.HandleFunc("/api/{user:[0-9]+}", Hello)
-	gorillaRoute.HandleFunc("/api/{user:\\d+}", Hello)
+	gorillaRoute.HandleFunc("/api/{user:\\w+}", Hello)
 	http.Handle("/", gorillaRoute)
 
 	// Server := Server {
