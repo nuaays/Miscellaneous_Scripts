@@ -46,7 +46,6 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Pragma", "no-cache")
 	urlParams := mux.Vars(r)
 	id := urlParams["id"]
 	ReadUser := User{}
@@ -56,6 +55,8 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer database.Close()
+
+	w.Header().Set("Pragma", "no-cache")
 
 	query_err := database.QueryRow("select * from users where user_id=?", id).Scan(&ReadUser.ID, &ReadUser.Name, &ReadUser.First, &ReadUser.Last, &ReadUser.Email)
 	switch {
