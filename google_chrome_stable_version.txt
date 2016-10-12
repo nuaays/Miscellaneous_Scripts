@@ -1,0 +1,235 @@
+
+http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_53.0.2785.143-1_i386.deb
+http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_53.0.2785.143-1_amd64.deb
+```
+53.0.2785.143
+53.0.2785.116
+53.0.2785.113
+53.0.2785.101
+53.0.2785.92
+53.0.2785.89
+52.0.2743.116
+52.0.2743.82
+51.0.2704.106
+51.0.2704.103
+51.0.2704.84
+51.0.2704.79
+51.0.2704.63
+50.0.2661.102
+50.0.2661.94
+50.0.2661.86
+50.0.2661.75
+49.0.2623.112
+49.0.2623.110
+49.0.2623.108
+49.0.2623.87
+49.0.2623.75
+48.0.2564.116
+48.0.2564.109
+48.0.2564.103
+48.0.2564.97
+48.0.2564.82
+47.0.2526.111
+47.0.2526.106
+47.0.2526.80
+47.0.2526.73
+46.0.2490.86
+46.0.2490.80
+46.0.2490.71
+45.0.2454.101
+45.0.2454.99
+45.0.2454.93
+45.0.2454.85
+44.0.2403.157
+44.0.2403.155
+44.0.2403.130
+44.0.2403.125
+44.0.2403.107
+44.0.2403.89
+43.0.2357.134
+43.0.2357.132
+43.0.2357.130
+43.0.2357.125
+43.0.2357.124
+43.0.2357.81
+43.0.2357.65
+42.0.2311.152
+42.0.2311.135
+42.0.2311.90
+41.0.2272.118
+41.0.2272.101
+41.0.2272.89
+41.0.2272.76
+40.0.2214.115
+40.0.2214.111
+40.0.2214.95
+40.0.2214.94
+40.0.2214.93
+40.0.2214.91
+39.0.2171.99
+39.0.2171.95
+39.0.2171.71
+39.0.2171.65
+38.0.2125.122
+38.0.2125.111
+```
+
+
+
+
+
+
+## Windows Version
+
+```
+Google Chrome v43.0.2357.134 32位版 离线包
+
+http://dl.google.com/chrome/win/4ED6DD719811795B/43.0.2357.134_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/4ED6DD719811795B/43.0.2357.134_chrome_installer.exe
+
+Google Chrome v43.0.2357.134 64位版 离线包
+
+http://dl.google.com/chrome/win/F29FC9F33ABB2EC3/43.0.2357.134_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/F29FC9F33ABB2EC3/43.0.2357.134_chrome64_instal
+
+
+
+Google Chrome v44.0.2403.125 32位版 离线包
+
+http://dl.google.com/chrome/win/423611FFB3B8CD56/44.0.2403.125_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/423611FFB3B8CD56/44.0.2403.125_chrome_installer.exe
+
+Google Chrome v44.0.2403.125 64位版 离线包
+
+http://dl.google.com/chrome/win/181FB3267D7D5264/44.0.2403.125_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/181FB3267D7D5264/44.0.2403.125_chrome64_inst
+
+
+2015年07月26日 44.0.2403.107
+http://dl.google.com/chrome/win/2EFE47E970C927DF/44.0.2403.107_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/2EFE47E970C927DF/44.0.2403.107_chrome_installer.exe
+
+Google Chrome v44.0.2403.107 64位版 离线包
+
+http://dl.google.com/chrome/win/C2C79A9E41382DC6/44.0.2403.107_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/C2C79A9E41382DC6/44.0.2403.107_chrome64_ins
+
+Google Chrome v44.0.2403.130 32位版 离线包
+
+http://dl.google.com/chrome/win/F19450DC8491D4A8/44.0.2403.130_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/F19450DC8491D4A8/44.0.2403.130_chrome_installer.exe
+
+Google Chrome v44.0.2403.130 64位版 离线包
+
+http://dl.google.com/chrome/win/EDDF5FEB856F8C39/44.0.2403.130_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/EDDF5FEB856F8C39/44.0.2403.130_chrome64_insta
+
+Google Chrome v44.0.2403.157 32位版 离线包
+
+http://dl.google.com/chrome/win/F24BEBCD670E2ACB/44.0.2403.157_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/F24BEBCD670E2ACB/44.0.2403.157_chrome_installer.exe
+
+Google Chrome v44.0.2403.157 64位版 离线包
+
+http://dl.google.com/chrome/win/1119FA397D484864/44.0.2403.157_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/1119FA397D484864/44.0.2403.157_chrome64_installer.exe
+
+稿源：N软网
+
+
+
+Google Chrome v45.0.2454.93 32位版 离线包
+
+http://dl.google.com/chrome/win/672BB1C93B533C53/45.0.2454.93_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/672BB1C93B533C53/45.0.2454.93_chrome_installer.exe
+
+Google Chrome v45.0.2454.93 64位版 离线包
+
+http://dl.google.com/chrome/win/5120C4E3E12B4C9B/45.0.2454.93_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/5120C4E3E12B4C9B/45.0.2454.93_chrome64_instal
+
+Google Chrome v45.0.2454.99 32位版 离线包
+
+http://dl.google.com/chrome/win/4A4B3398AF08265E/45.0.2454.99_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/4A4B3398AF08265E/45.0.2454.99_chrome_installer.exe
+
+Google Chrome v45.0.2454.99 64位版 离线包
+
+http://dl.google.com/chrome/win/37D13DF3857B5A8A/45.0.2454.99_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/37D13DF3857B5A8A/45.0.2454.99_chrome64_instal
+
+
+Google Chrome v46.0.2490.86 32位版 离线包
+
+http://dl.google.com/chrome/win/9559FFD4C2CF2E2F/46.0.2490.86_chrome_installer.exe
+
+Google Chrome v46.0.2490.86 64位版 离线包
+
+http://dl.google.com/chrome/win/49AEF7DFA4C1C319/46.0.2490.86_chrome64_installer.exe
+
+
+Google Chrome v47.0.2526.73 32位版 离线包
+
+http://dl.google.com/chrome/win/F7D6CB514ABC7EEB/47.0.2526.73_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/F7D6CB514ABC7EEB/47.0.2526.73_chrome_installer.exe
+
+Google Chrome v47.0.2526.73 64位版 离线包
+
+http://dl.google.com/chrome/win/E35ECF06F2881431/47.0.2526.73_chrome64_installer.exe
+http://redirector.gvt1.com/edgedl/chrome/win/E35ECF06F2881431/47.0.2526.73_chrome64_install
+
+
+Google Chrome v47.0.2526.111 32位版 离线包
+
+http://dl.google.com/release2/47.0.2526.111_chrome_installer.exe
+
+http://redirector.gvt1.com/edgedl/release2/47.0.2526.111_chrome_installer.exe
+
+Google Chrome v47.0.2526.111 64位版 离线包
+
+http://dl.google.com/release2/47.0.2526.111_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/release2/47.0.2526.111_chrome_installer_win64.exe
+
+
+Google Chrome v48.0.2564.82 32位版 离线包
+
+http://dl.google.com/release2/48.0.2564.82_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/release2/48.0.2564.82_chrome_installer.exe
+
+Google Chrome v48.0.2564.82 64位版 离线包
+
+http://dl.google.com/release2/48.0.2564.82_chrome_installer_win64.exe
+http://redirector.gvt1.com/edgedl/release2/48.0.2564.82_chrome_installer_win64.exe
+
+
+Google Chrome v50.0.2661.102 无更新功能版 32位
+
+http://dl.google.com/release2/50.0.2661.102_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/release2/50.0.2661.102_chrome_installer.exe
+
+Google Chrome v50.0.2661.102 无更新功能版 64位
+
+http://dl.google.com/release2/50.0.2661.102_chrome_installer_win64.exe
+http://redirector.gvt1.com/edgedl/release2/50.0.2661.102_chrome_installer_win64.exe
+
+Google Chrome v51.0.2704.79 无更新功能版 32位
+
+http://dl.google.com/51.0.2704.79_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/release2/51.0.2704.79_chrome_installer.exe
+
+Google Chrome v51.0.2704.79 无更新功能版 64位
+
+http://dl.google.com/release2/51.0.2704.79_chrome_installer_win64.exe
+http://redirector.gvt1.com/edgedl/release2/51.0.2704.79_chrome_installer_win64.exe
+
+Google Chrome v51.0.2704.103 无更新功能版 32位
+
+http://dl.google.com/release2/51.0.2704.103_chrome_installer.exe
+http://redirector.gvt1.com/edgedl/release2/51.0.2704.103_chrome_installer.exe
+
+Google Chrome v51.0.2704.103 无更新功能版 64位
+
+http://dl.google.com/release2/51.0.2704.103_chrome_installer_win64.exe
+http://redirector.gvt1.com/edgedl/release2/51.0.2704.103_chrome_installer_win64.exe
+```
+
