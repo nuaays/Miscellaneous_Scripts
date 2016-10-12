@@ -80,6 +80,7 @@ func main() {
 	//create user
 	//http://localhost:8080/api/user/create?user=nkozyra&first=Nathan&last=Kozyra&email=nathan@nathankozyra.com
 	gorillaRoute.HandleFunc("/api/user/create", CreateUser).Methods("GET")
+        //get user information
 	gorillaRoute.HandleFunc("/api/user/read/{id:\\d+}", GetUser).Methods("GET")
 	http.Handle("/", gorillaRoute)
 
