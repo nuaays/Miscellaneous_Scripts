@@ -45,6 +45,32 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(q)
 }
 
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Pragma", "no-cache")
+	urlParams := mux.Vars(r)
+	id := urlParams["id"]
+	ReadUser := User{}
+
+	database, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer database.Close()
+
+	query_err := database.QueryRow("select * from users where user_id=?", id).Scan(&ReadUser.ID, &ReadUser.Name, &ReadUser.First, &ReadUser.Last, &ReadUser.Email)
+	switch {
+	case query_err == sql.ErrNoRows:
+		fmt.Fprintf(w, "No such user")
+	case query_err != nil:
+		log.Fatal(query_err)
+		fmt.Fprintf(w, "Error")
+	default:
+		output, _ := json.Marshal(ReadUser)
+		fmt.Fprintf(w, string(output))
+	}
+
+}
+
 func main() {
 	gorillaRoute := mux.NewRouter()
 	//gorillaRoute.HandleFunc("/api/{user:[0-9]+}", Hello)
@@ -53,6 +79,7 @@ func main() {
 	//create user
 	//http://localhost:8080/api/user/create?user=nkozyra&first=Nathan&last=Kozyra&email=nathan@nathankozyra.com
 	gorillaRoute.HandleFunc("/api/user/create", CreateUser).Methods("GET")
+	gorillaRoute.HandleFunc("/api/user/read/{id:\\d+}", GetUser).Methods("GET")
 	http.Handle("/", gorillaRoute)
 
 	// Server := Server {
