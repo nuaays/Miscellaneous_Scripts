@@ -196,6 +196,26 @@ func UsersRetrieve(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, string(output))
 }
 
+func UsersInfo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Allow", "DELETE, GET, HEAD, OPTIONS, POST, PUT")
+}
+
+func Init() {
+	gorillaRoute := mux.NewRouter()
+	//create user
+	//http://localhost:8080/api/user/create?user=nkozyra&first=Nathan&last=Kozyra&email=nathan@nathankozyra.com
+	gorillaRoute.HandleFunc("/api/user/create", CreateUser).Methods("GET")
+	//get user information
+	gorillaRoute.HandleFunc("/api/user/read/{id:\\d+}", GetUser).Methods("GET")
+	//userupdate
+	gorillaRoute.HandleFunc("/api/users/{id:[0-9]+}", UsersUpdate).Methods("PUT")
+	//user retrieve
+	gorillaRoute.HandleFunc("/api/users", UsersRetrieve).Methods("GET")
+	//options
+	gorillaRoute.HandleFunc("/api/users", UsersInfo).Methods("OPTIONS")
+
+}
+
 func main() {
 
 	var apiversion string = "1.0"
