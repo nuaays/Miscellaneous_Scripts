@@ -8,6 +8,8 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 var database *sql.DB
@@ -25,7 +27,41 @@ type User struct {
 }
 
 type CreateResponse struct {
-	Error string "json:error"
+	Error     string "json:error"
+	ErrorCode int    "json:code"
+}
+
+type ErrMsg struct {
+	ErrCode    int
+	StatusCode int
+	Msg        string
+}
+
+func ErrorMessages(err int64) ErrMsg {
+	var em ErrMsg
+	errorMessage := ""
+	statusCode := 200
+	errorCode := 0
+	switch err {
+	case 1062:
+		errorMessage = "Duplicate entry"
+		errorCode = 10
+		statusCode = 409
+	}
+
+	em.ErrCode = errorCode
+	em.StatusCode = statusCode
+	em.Msg = errorMessage
+
+	return em
+}
+
+func dbErrorParse(err string) (string, int64) {
+	Parts := strings.Split(err, ":")
+	errorMessage := Parts[1]
+	Code := strings.Split(Parts[0], "Error ")
+	errorCode, _ := strconv.ParseInt(Code[1], 10, 32)
+	return errorMessage, errorCode
 }
 
 func userRouter(w http.ResponseWriter, r *http.Request) {
@@ -134,6 +170,14 @@ func main() {
 	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
 	if err != nil {
 		log.Fatal(err)
+		errorMessage, errorCode := dbErrorParse(err.Error())
+		fmt.Println(errorMessage)
+		fmt.Println(errorCode)
+		// error, httpCode, msg := ErrorMessages(errorCode)
+		// Response.Error = msg
+		// Response.ErrorCode = error
+		// fmt.Println(httpCode)
+		//http.Error(w, "Conflict", httpCode)
 	}
 	//defer db.Close()
 	database = db
