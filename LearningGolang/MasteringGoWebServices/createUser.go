@@ -24,6 +24,7 @@ type User struct {
 	Email string "json:email"
 	First string "json:first"
 	Last  string "json:last"
+	Image string "json:image"
 }
 
 type CreateResponse struct {
@@ -84,6 +85,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	NewUser.Email = r.FormValue("email")
 	NewUser.First = r.FormValue("first")
 	NewUser.Last = r.FormValue("last")
+	NewUser.Image = ""
 	output, err := json.Marshal(NewUser)
 	fmt.Println(string(output))
 	if err != nil {
@@ -98,7 +100,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	Response := CreateResponse{}
 
-	sql := "INSERT INTO users set user_nickname='" + NewUser.Name + "', user_first='" + NewUser.First + "', user_last='" + NewUser.Last + "', user_email='" + NewUser.Email + "'"
+	sql := "INSERT INTO users set user_nickname='" + NewUser.Name + "', user_first='" + NewUser.First + "', user_last='" + NewUser.Last + "', user_email='" + NewUser.Email + "', user_image='" + NewUser.Image + "'"
 	q, err := database.Exec(sql)
 	if err != nil {
 		fmt.Println(err)
@@ -108,6 +110,38 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	createOutput, _ := json.Marshal(Response)
 	fmt.Fprintln(w, string(createOutput))
 
+}
+
+func UsersUpdate(w http.ResponseWriter, r *http.Request) {
+	Response := CreateResponse{}
+	params := mux.Vars(r)
+	uid := params["id"]
+	email := r.FormValue("email")
+	var userCount int
+	err := database.QueryRow("SELECT COUNT(user_id) FROM users WHERE user_id=?", uid).Scan(&userCount)
+	if userCount == 0 {
+		//error, httpCode, msg := ErrorMessages(404)
+		em := ErrorMessages(404)
+		log.Println(em.ErrCode)
+		log.Println(w, em.Msg, em.StatusCode)
+
+	} else if err != nil {
+		log.Println(err)
+	} else {
+		//update
+		_, uperr := database.Exec("UPDATE users SET user_email=?WHERE user_id=?", email, uid)
+		if uperr != nil {
+			//_, errorCode := dbErrorParse(uperr.Error())
+			//_, httpCode, msg := ErrorMessages(errorCode)
+
+		} else {
+			Response.Error = "success"
+			Response.ErrorCode = 0
+			output, _ := json.Marshal(Response)
+			fmt.Println(w, string(output))
+		}
+
+	}
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request) {
@@ -123,7 +157,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Pragma", "no-cache")
 
-	query_err := database.QueryRow("select * from users where user_id=?", id).Scan(&ReadUser.ID, &ReadUser.Name, &ReadUser.First, &ReadUser.Last, &ReadUser.Email)
+	query_err := database.QueryRow("select * from users where user_id=?", id).Scan(&ReadUser.ID, &ReadUser.Name, &ReadUser.First, &ReadUser.Last, &ReadUser.Email, &ReadUser.Image)
 	switch {
 	case query_err == sql.ErrNoRows:
 		fmt.Fprintf(w, "No such user")
@@ -151,7 +185,7 @@ func UsersRetrieve(w http.ResponseWriter, r *http.Request) {
 
 	for rows.Next() {
 		user := User{}
-		rows.Scan(&user.ID, &user.Name, &user.First, &user.Last, &user.Email)
+		rows.Scan(&user.ID, &user.Name, &user.First, &user.Last, &user.Email, &user.Image)
 
 		o, _ := json.Marshal(user)
 		fmt.Println(string(o))
@@ -181,6 +215,7 @@ func main() {
 	}
 	//defer db.Close()
 	database = db
+	fmt.Println("Waiting ...")
 
 	gorillaRoute := mux.NewRouter()
 	//gorillaRoute.HandleFunc("/api/{user:[0-9]+}", Hello)
@@ -191,7 +226,9 @@ func main() {
 	gorillaRoute.HandleFunc("/api/user/create", CreateUser).Methods("GET")
 	//get user information
 	gorillaRoute.HandleFunc("/api/user/read/{id:\\d+}", GetUser).Methods("GET")
-	//
+	//userupdate
+	gorillaRoute.HandleFunc("/api/users/{id:[0-9]+}", UsersUpdate).Methods("PUT")
+	//user retrieve
 	gorillaRoute.HandleFunc("/api/users", UsersRetrieve).Methods("GET")
 
 	//userRouter
