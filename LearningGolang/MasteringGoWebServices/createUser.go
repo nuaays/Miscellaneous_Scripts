@@ -10,12 +10,35 @@ import (
 	"net/http"
 )
 
+var database *sql.DB
+
+type Users struct {
+	Users []User `json:"users"`
+}
+
 type User struct {
 	ID    int    "json:id"
 	Name  string "json:username"
 	Email string "json:email"
 	First string "json:first"
 	Last  string "json:last"
+}
+
+type CreateResponse struct {
+	Error string "json:error"
+}
+
+func userRouter(w http.ResponseWriter, r *http.Request) {
+	ourUser := User{}
+	ourUser.Name = "Sen Yang"
+	ourUser.Email = "yangsen@zhongan.com"
+	ourUser.ID = 100
+	//ourUser.First = "Sen"
+	// ourUser.Last = "Yang"
+
+	output, _ := json.Marshal(&ourUser)
+	fmt.Fprintln(w, string(output))
+
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -31,18 +54,24 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Something went wrong!")
 	}
 
-	database, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer database.Close()
+	// database, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer database.Close()
+
+	Response := CreateResponse{}
 
 	sql := "INSERT INTO users set user_nickname='" + NewUser.Name + "', user_first='" + NewUser.First + "', user_last='" + NewUser.Last + "', user_email='" + NewUser.Email + "'"
 	q, err := database.Exec(sql)
 	if err != nil {
 		fmt.Println(err)
+		Response.Error = err.Error()
 	}
 	fmt.Println(q)
+	createOutput, _ := json.Marshal(Response)
+	fmt.Fprintln(w, string(createOutput))
+
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request) {
@@ -50,11 +79,11 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	id := urlParams["id"]
 	ReadUser := User{}
 
-	database, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer database.Close()
+	// database, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer database.Close()
 
 	w.Header().Set("Pragma", "no-cache")
 
@@ -72,7 +101,43 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func UsersRetrieve(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Pragma", "no-cache")
+	// database, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// defer database.Close()
+
+	rows, _ := database.Query("select * from users LIMIT 10")
+	Response := Users{}
+
+	for rows.Next() {
+		user := User{}
+		rows.Scan(&user.ID, &user.Name, &user.First, &user.Last, &user.Email)
+
+		o, _ := json.Marshal(user)
+		fmt.Println(string(o))
+
+		Response.Users = append(Response.Users, user)
+	}
+	output, _ := json.Marshal(Response)
+	fmt.Fprintln(w, string(output))
+}
+
 func main() {
+
+	var apiversion string = "1.0"
+	fmt.Println("Starting JSON server")
+
+	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/social_network")
+	if err != nil {
+		log.Fatal(err)
+	}
+	//defer db.Close()
+	database = db
+
 	gorillaRoute := mux.NewRouter()
 	//gorillaRoute.HandleFunc("/api/{user:[0-9]+}", Hello)
 	//gorillaRoute.HandleFunc("/api/{user:\\w+}", Hello)
@@ -80,8 +145,14 @@ func main() {
 	//create user
 	//http://localhost:8080/api/user/create?user=nkozyra&first=Nathan&last=Kozyra&email=nathan@nathankozyra.com
 	gorillaRoute.HandleFunc("/api/user/create", CreateUser).Methods("GET")
-        //get user information
+	//get user information
 	gorillaRoute.HandleFunc("/api/user/read/{id:\\d+}", GetUser).Methods("GET")
+	//
+	gorillaRoute.HandleFunc("/api/users", UsersRetrieve).Methods("GET")
+
+	//userRouter
+	gorillaRoute.HandleFunc(fmt.Sprintf("/api/%s/user", apiversion), userRouter).Methods("GET")
+
 	http.Handle("/", gorillaRoute)
 
 	// Server := Server {
