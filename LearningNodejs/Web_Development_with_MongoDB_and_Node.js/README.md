@@ -3,6 +3,26 @@
 ## For Web Development with MongoDB and Node.js
 * http://techbus.safaribooksonline.com/book/web-development/9781783987306
 
+## Node Features
+* Node Package Manager
+```
+Writing applications with Node is really enjoyable when you realize the sheer wealth of information and tools at your disposal! Using Node's built-in package manager npm, you can find literally tens of thousands of modules that can be installed and used within your application with just a few keystrokes! You can view the library of available modules by visiting http://npmjs.org. Downloading and installing any module within your application is as simple as executing the npm install package command. Have you written a module that you want to share with the world? Package it up using npm, and upload it to the public npmjs.org registry just as easily! Not sure how a module works that you downloaded and installed? The source code is right there in your projects' node_modules/ folder waiting to be explored!
+```
+* Networking and file IO
+```
+In addition to the powerful nonblocking asynchronous nature of Node, it also has very robust networking and filesystem tools available via its core modules. With Node's networking modules, you can create server and client applications that accept network connections and communicate via streams and pipes.
+```
+* Not just on the web
+```
+Node isn't just for web development! It can be a powerful solution to create command-line tools as well as full-featured locally run applications that have nothing to do with the Web or a browser. Grunt.js is a great example of a Node-powered command-line tool that many web developers use daily to automate everyday tasks such as build processes, compiling CoffeeScript, launching Node servers, running tests, and more.
+In addition to command-line tools, Node has recently become increasingly popular among the hardware crowd with the Nodebots movement. Johnny-Five and Cylon.js are two popular Node libraries that exist to provide a framework to work with robotics.
+```
+* Real-time web with Socket.io
+```
+Node achieves real-time communication with Socket.io. Using Socket.io, you can create features such as instant collaboration, which is similar to multiuser editing in Google Docs. What was once achieved using cumbersome (and not real-time) long polling can now be achieved using WebSockets. While WebSockets is a feature that is only supported in modern browsers, Socket.io also features seamless fallback implementations for legacy browsers.
+
+Using this lightweight core, everything else is left to the developer—but don't let that scare you. The beauty of working with Node is that there is a thriving community developing and releasing modules every day via npm. As of this writing, npm has over 61,000 packages available! Throughout this book, we will use some of the most popular packages that help make writing web applications fun and easy!
+```
 
 
 ## Chapters
