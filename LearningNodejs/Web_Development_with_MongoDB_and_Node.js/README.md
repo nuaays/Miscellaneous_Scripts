@@ -61,6 +61,7 @@ How to deploy your entire project to the cloud using services like Heroku and AW
 
 
 ## Code for Second Editoon
+* http://techbus.safaribooksonline.com/book/web-development/9781785287527
 * http://examples.oreilly.com/9781785287527/9781785287527_Code.zip
 
 
