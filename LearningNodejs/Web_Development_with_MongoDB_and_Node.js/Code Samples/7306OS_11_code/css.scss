@@ -1,0 +1,37 @@
+$sprite-bg:url("/images/editor/sprite-msg-bg.png");
+
+@mixin radius($radius) {
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+.upload-button {
+    border-bottom: solid 2px #005A8B;
+    background: transparent $sprite-bg no-repeat;
+    @include radius(4px);
+    cursor: pointer;
+}
+
+#step-status {
+    color:#dbdbdb; font-size:14px;
+    span.active {
+        color:#1e8acb;
+    }
+
+    &.basic-adjust, &.message-editor {
+        width: 525px;
+    }
+
+    .icon {
+        height:65px;
+        width: 50px;
+        margin:auto;
+    }
+}
+
+@import "alerts";
+@import "attachments";
+@import "codemirror";
+@import "drafts";
