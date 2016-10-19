@@ -9,6 +9,21 @@ while(count <= 10){
 }
 document.write(total);
 
+document.write("<br>");
+
+
+function power(base, exponent){
+  var result = 1;
+  for(var count=0; count < exponent; count +=1 ){
+    result *= base;
+  }
+  return result;
+}
+
+document.write(power(2, 10));
+
+
+
 </script>
 
 </body>
