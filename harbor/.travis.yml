@@ -1,0 +1,96 @@
+sudo: true
+
+language: go
+
+go: 
+  - 1.6.2
+
+go_import_path: github.com/vmware/harbor
+
+services: 
+  - docker
+
+dist: trusty
+
+env:
+  DB_HOST: 127.0.0.1
+  DB_PORT: 3306 
+  DB_USR: root 
+  DB_PWD: root123
+  MYSQL_HOST: localhost
+  MYSQL_PORT: 3306 
+  MYSQL_USR: root 
+  MYSQL_PWD: root123
+  DOCKER_COMPOSE_VERSION: 1.7.1
+  HARBOR_ADMIN: admin
+  HARBOR_ADMIN_PASSWD: Harbor12345 
+  UI_SECRET: tempString  
+  MAX_JOB_WORKERS: 3
+  SECRET_KEY: 1234567890123456 
+  AUTH_MODE: db_auth
+  SELF_REGISTRATION: "on"
+
+before_install:
+   - sudo ./tests/hostcfg.sh
+   - cd Deploy
+   - sudo ./prepare
+   - cd ..
+
+install: 
+  - sudo apt-get update && sudo apt-get install -y libldap2-dev 
+#  - sudo apt-get remove -y mysql-common mysql-server-5.5 mysql-server-core-5.5 mysql-client-5.5 mysql-client-core-5.5
+#  - sudo apt-get autoremove -y
+#  - sudo apt-get install -y libaio1
+#  - wget -O mysql-5.6.14.deb http://dev.mysql.com/get/Downloads/MySQL-5.6/mysql-5.6.14-debian6.0-x86_64.deb/from/http://cdn.mysql.com/
+#  - sudo dpkg -i mysql-5.6.14.deb
+#  - sudo cp /opt/mysql/server-5.6/support-files/mysql.server /etc/init.d/mysql.server
+#  - sudo ln -s /opt/mysql/server-5.6/bin/* /usr/bin/
+#  - sudo sed -i'' 's/table_cache/table_open_cache/' /etc/mysql/my.cnf
+#  - sudo sed -i'' 's/log_slow_queries/slow_query_log/' /etc/mysql/my.cnf
+#  - sudo sed -i'' 's/basedir[^=]\+=.*$/basedir = \/opt\/mysql\/server-5.6/' /etc/mysql/my.cnf
+#  - sudo /etc/init.d/mysql.server start
+#  - mysql --version
+  - go get -d github.com/docker/distribution
+  - go get -d github.com/docker/libtrust
+  - go get -d github.com/go-sql-driver/mysql
+  - go get github.com/golang/lint/golint
+  - go get github.com/GeertJohan/fgt
+
+#  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - IP=`ip addr s eth0 |grep "inet "|awk '{print $2}' |awk -F "/" '{print $1}'`
+  - sudo sed -i '$a DOCKER_OPTS=\"--insecure-registry '$IP':5000\"' /etc/default/docker
+  - sudo service docker restart
+  - go get github.com/dghubble/sling
+  - go get github.com/stretchr/testify
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
+  
+before_script:
+  # create tables and load data
+  # - mysql < ./Deploy/db/registry.sql -uroot --verbose
+
+script:
+  - sudo ./tests/testprepare.sh 
+  - docker-compose -f Deploy/docker-compose.test.yml up -d
+  - go list ./... | grep -v -E 'vendor|tests' | xargs -L1 fgt golint
+  - go list ./... | grep -v -E 'vendor|tests' | xargs -L1 go vet
+  - export MYSQL_HOST=$IP
+  - export REGISTRY_URL=$IP:5000
+  - echo $REGISTRY_URL
+  - ./tests/pushimage.sh 
+  - ./Deploy/coverage4gotest.sh
+  - goveralls -coverprofile=profile.cov -service=travis-ci
+
+  - docker-compose -f Deploy/docker-compose.test.yml down
+  
+  - docker-compose -f Deploy/docker-compose.yml up -d
+  
+  - docker ps
+  - go run tests/startuptest.go http://localhost/
+  - go run tests/userlogintest.go -name ${HARBOR_ADMIN} -passwd ${HARBOR_ADMIN_PASSWD}
+
+#  - sudo ./tests/testprepare.sh
+#  - go test -v ./tests/apitests
