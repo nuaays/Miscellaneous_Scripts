@@ -39,7 +39,7 @@ tornado.options.define("unminified", default=False,
                        help="Use the unminified js (for development only)")
 
 tornado.options.define("host", default='localhost', help="Server host")
-tornado.options.define("port", default=57575, type=int, help="Server port")
+tornado.options.define("port", default=10000, type=int, help="Server port")
 tornado.options.define("one_shot", default=False,
                        help="Run a one-shot instance. Quit at term close")
 tornado.options.define("shell", help="Shell to execute at login")
