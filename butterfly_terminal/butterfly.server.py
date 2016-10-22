@@ -46,7 +46,7 @@ tornado.options.define("shell", help="Shell to execute at login")
 tornado.options.define("motd", default='motd', help="Path to the motd file.")
 tornado.options.define("cmd",
                        help="Command to run instead of shell, f.i.: 'ls -l'")
-tornado.options.define("unsecure", default=False,
+tornado.options.define("unsecure", default=True,
                        help="Don't use ssl not recommended")
 tornado.options.define("login", default=False,
                        help="Use login screen at start")
