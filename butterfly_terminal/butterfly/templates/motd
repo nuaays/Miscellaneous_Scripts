@@ -1,7 +1,0 @@
-{{ colors.light_white }}
-From:{{ colors.white }}
-{{ colors.red if opts.unsecure else colors.green }}
-{{ butterfly.socket.remote_addr }}:{{ butterfly.socket.remote_port }}
-{{ colors.reset }}
-
-
