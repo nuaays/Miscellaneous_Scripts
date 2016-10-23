@@ -4,6 +4,10 @@ import (
   "os"
   "github.com/gorilla/mux"
   "net/http"
+  "database/sql"
+  "fmt"
+  _ "github.com/go-sql-driver/mysql"
+  "log"
 )
 
 const (
