@@ -22,6 +22,15 @@ const (
   PORT = ":8080"
 )
 
+var database *sql.DB
+
+type Page struct {
+  Title   string
+  Content string
+  Date    string
+}
+
+
 func pageHandler(w http.ResponseWriter, r *http.Request) {
   vars := mux.Vars(r)
   pageID := vars["id"]
