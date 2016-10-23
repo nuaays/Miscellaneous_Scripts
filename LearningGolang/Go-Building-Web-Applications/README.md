@@ -2,6 +2,7 @@
 
 
 ## Go : Building Web Applications
+### Build Real-world, production-ready solutions by hardnessing the powerful features of Go
 * http://techbus.safaribooksonline.com/book/web-development/go/9781787123496
 
 ```
