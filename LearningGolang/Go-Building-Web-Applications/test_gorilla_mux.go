@@ -1,8 +1,17 @@
 package main
 
 import (
+  "os"
   "github.com/gorilla/mux"
   "net/http"
+)
+
+const (
+  DBHost  = "127.0.0.1"
+  DBPort  = ":3306"
+  DBUser  = "root"
+  DBPass  = "password!"
+  DBDbase = "cms"
 )
 
 const (
