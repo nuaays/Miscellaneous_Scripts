@@ -10,3 +10,8 @@
 ## Flask编码风格
 * http://www.pocoo.org/internal/styleguide/
 * http://www.ituring.com.cn/article/211125 
+
+
+## Flask微网络开发框架核心
+* Jinja2模板引擎
+* Werzeug WSGI工具集
