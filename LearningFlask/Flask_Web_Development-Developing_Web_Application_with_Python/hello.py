@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from flask import make_response
+from flask import redirect
 
 app = Flask(__name__)
 
@@ -15,6 +16,9 @@ def hello():
 def index():
     return "<h1>Bad Request</h1>", 404
 
+@app.route("/redirect")
+def redirect():
+    return redirect('http://www.baidu.com')
 
 @app.route("/user/<name>")
 def user(name):
