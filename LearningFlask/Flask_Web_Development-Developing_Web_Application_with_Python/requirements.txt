@@ -1,0 +1,4 @@
+Flask 0.11.1
+Flask-Migrate  - https://github.com/miguelgrinberg/Flask-Migrate
+Flask-SocketIO - https://github.com/miguelgrinberg/Flask-SocketIO
+Flask-HTTPAuth - https://github.com/miguelgrinberg/Flask-HTTPAuth
