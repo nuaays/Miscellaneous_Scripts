@@ -5,3 +5,8 @@
 *            英文版 http://pan.baidu.com/share/link?shareid=1105623095&uk=1983457874&fid=935864699599862
 * 豆瓣     : https://book.douban.com/subject/26274202/
 * Code     : http://www.ituring.com.cn/book/download/269a90bb-df51-42ac-8191-4be3a804b8fc
+
+
+## Flask编码风格
+* http://www.pocoo.org/internal/styleguide/
+* http://www.ituring.com.cn/article/211125 
