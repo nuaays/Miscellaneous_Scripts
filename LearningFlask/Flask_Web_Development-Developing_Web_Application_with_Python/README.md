@@ -19,6 +19,9 @@
 
 
 
+##使用bootstrap模板
+* Flask-Bootstrap http://pythonhosted.org/Flask-Bootstrap/basic-usage.html
+* http://blog.csdn.net/aotony_1988/article/details/39432067
 
 ## 登录界面
 * http://laoxu.blog.51cto.com/4120547/1568677
