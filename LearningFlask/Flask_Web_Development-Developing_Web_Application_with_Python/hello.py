@@ -3,7 +3,9 @@ from flask import request
 from flask import make_response
 from flask import redirect
 
+from flask_script import Manager
 app = Flask(__name__)
+manager = Manager(app)
 
 @app.route("/")
 def hello():
@@ -16,9 +18,9 @@ def hello():
 def index():
     return "<h1>Bad Request</h1>", 404
 
-@app.route("/redirect")
-def redirect():
-    return redirect('http://www.baidu.com')
+#@app.route("/redirect")
+#def redirect():
+#    return redirect('http://www.baidu.com')
 
 @app.route("/user/<name>")
 def user(name):
@@ -27,5 +29,6 @@ def user(name):
 
 
 if __name__ == "__main__":
-    app.run()
+    #app.run()
+    manager.run()
 
