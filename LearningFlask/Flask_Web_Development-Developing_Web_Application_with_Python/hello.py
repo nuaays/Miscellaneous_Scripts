@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import request, url_for
+from flask import request, url_for, render_template
 from flask import make_response
 from flask import redirect
 
@@ -25,7 +25,8 @@ def index():
 
 @app.route("/user/<name>")
 def user(name):
-    return "<h1>Hello, %s!</h1>" % name
+    #return "<h1>Hello, %s!</h1>" % name
+    return render_template('hello.html', name=name) 
 
 @app.route("/about", methods=["GET", "POST"])
 def about():
