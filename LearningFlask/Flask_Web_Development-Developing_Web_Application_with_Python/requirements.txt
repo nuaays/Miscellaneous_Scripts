@@ -1,4 +1,6 @@
 Flask 0.11.1
+Flask-script
 Flask-Migrate  - https://github.com/miguelgrinberg/Flask-Migrate
 Flask-SocketIO - https://github.com/miguelgrinberg/Flask-SocketIO
 Flask-HTTPAuth - https://github.com/miguelgrinberg/Flask-HTTPAuth
+Flask-Boost    - https://pypi.python.org/pypi/Flask-Boost/0.7.5
