@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding=UTF-8 -*-
 #
-import os, sys
+import os, sys, datetime
 from flask import Flask, send_from_directory
 from flask import request, url_for, render_template
 from flask import make_response
@@ -14,16 +14,39 @@ from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 
+from sqlalchemy import Boolean, Column
+from sqlalchemy import DateTime, Integer, String, Text
+from sqlalchemy.ext.declarative import declarative_base
+Base = declarative_base()
+
 
 app = Flask(__name__, static_folder=None)
 assets_folder = os.path.join(app.root_path, 'assets')
 app.config.from_object('config')
 db = SQLAlchemy(app)
+db.Model = Base
 # bootstrap = Bootstrap(app)
 manager = Manager(app)
 
 
-
+class Appointment(Base):
+    __tablename__ = "appointment"
+    id = Column(Integer, primary_key=True)
+    created = Column(DateTime, default=datetime.now)
+    modified = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    title = Column(String(255))
+    start = Column(DateTime, nullable = False)
+    end = Column(DateTime, nullable = False)
+    allday = Column(Boolean, default=False)
+    location = Column(String(255))
+    description = Column(Text)
+    
+    @property
+    def duration(self):
+        delta = self.end - self.start
+        return delta.days * 24 * 60 * 60 + delta.seconds
+    def __repr__(self):
+        return (u'<{self.__class__.__name__}:{self.id}>'.format(self=self))
 
 class Role(db.Model):
     __tablename__ = 'roles'

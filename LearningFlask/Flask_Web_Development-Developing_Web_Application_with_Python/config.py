@@ -8,3 +8,4 @@ SECRET_KEY = 'you-will-never-guess'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+SEND_FILE_MAX_AGE_DEFAULT = 2592000
