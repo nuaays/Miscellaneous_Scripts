@@ -1,7 +1,11 @@
+#!/usr/bin/env python
+#coding:utf-8
+#
 from flask import Flask
 from flask import request, url_for, render_template
 from flask import make_response
 from flask import redirect
+from flask_bootstrap import Bootstrap
 
 from flask_script import Manager
 app = Flask(__name__)
@@ -15,9 +19,17 @@ def hello():
     response.set_cookie('answer','42')
     return response
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
 @app.route("/bad")
-def index():
-    return "<h1>Bad Request</h1>", 404
+def redirect_to_error():
+    return render_template('500.html'), 500
 
 #@app.route("/redirect")
 #def redirect():
