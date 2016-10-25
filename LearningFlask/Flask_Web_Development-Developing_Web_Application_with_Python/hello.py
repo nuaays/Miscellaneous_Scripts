@@ -2,7 +2,7 @@
 # -*- coding=UTF-8 -*-
 #
 import os, sys
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask import request, url_for, render_template
 from flask import make_response
 from flask import redirect
@@ -15,10 +15,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=None)
+assets_folder = os.path.join(app.root_path, 'assets')
 app.config.from_object('config')
 db = SQLAlchemy(app)
-bootstrap = Bootstrap(app)
+# bootstrap = Bootstrap(app)
 manager = Manager(app)
 
 
@@ -48,6 +49,10 @@ def get_on_g_object(response):
   app.logger.debug('after request: g.x is {g.x}'.format(g=g))
   return response
 
+
+@app.route('/assets/<path:filename>')
+def assets(filename):
+    return send_from_directory(assets_folder, filename)
 
 
 @app.route("/")
