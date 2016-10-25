@@ -43,6 +43,11 @@ def index():
         form.name.data = ''
     return render_template('index.html', form=form, name=name)
 
+@app.route('/object/')
+def return_object():
+    headers = {'Content-Type': 'text/plain'}
+    return make_response('Hello, world!', 200, headers)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
