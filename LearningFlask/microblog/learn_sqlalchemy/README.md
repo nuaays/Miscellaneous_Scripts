@@ -9,4 +9,6 @@
 
 ## Start 
 * http://pythoncentral.io/introductory-tutorial-python-sqlalchemy/
-
+* http://www.jb51.net/article/49789.htm
+* http://blog.csdn.net/dupei/article/details/6014488
+* http://www.cnblogs.com/coder2012/p/4741081.html
