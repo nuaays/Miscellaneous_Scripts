@@ -1,4 +1,4 @@
-
+#coding:utf-8
 from flask import Flask
 from flask.ext import restful
 
@@ -12,7 +12,7 @@ class HelloWorld(restful.Resource):
         return {'hello':'world'}
 
 
-api.add_resource(HelloWorld, '/')
+api.add_resource(HelloWorld, '/', '/hello')
 
 
 if __name__ == '__main__':
