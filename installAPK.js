@@ -1,4 +1,6 @@
-var Promise = require('bluebird')
+#From TestFarm
+
+ar Promise = require('bluebird')
 var adb = require('adbkit')
 var client = adb.createClient()
 var apk = 'app.apk'
