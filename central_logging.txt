@@ -1,0 +1,7 @@
+
+
+## Flume
+*　https://segmentfault.com/a/1190000000653764
+×　https://segmentfault.com/a/1190000000504942
+×　http://probablyfine.co.uk/2014/08/24/using-docker-with-apache-flume-2/
+×　http://cloud.51cto.com/art/201504/473776_all.htm
