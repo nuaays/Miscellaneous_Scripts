@@ -5,3 +5,21 @@
 ×　https://segmentfault.com/a/1190000000504942
 ×　http://probablyfine.co.uk/2014/08/24/using-docker-with-apache-flume-2/
 ×　http://cloud.51cto.com/art/201504/473776_all.htm
+
+
+## Collect Docker Container logs
+*　http://m.blog.csdn.net/article/details?id=50642601
+
+
+## Flume + Kafka to collect Docker app logs
+* http://www.tuicool.com/articles/fU3EzeA
+
+## 
+* http://blog.csdn.net/w412692660/article/details/49308921
+
+
+## Using Docker to simulate distributed Flume
+* http://blog.csdn.net/u013942461/article/details/51354686
+* http://www.thinksaas.cn/topics/0/400/400104.html
+
+http://blog.csdn.net/w412692660/article/details/49308921
