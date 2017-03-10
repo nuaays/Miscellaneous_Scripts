@@ -1,18 +1,21 @@
 nginx:
-   image: "nginx:1.9"
+   image: "nginx:latest"
    ports:
-     - 5043:443
+     - 10001:443
    links:
-     - registry:registry
+     - registry_auth:registry_auth
    volumes:
-     - ./nginx/:/etc/nginx/conf.d:ro
+     #- ./nginx/:/etc/nginx/conf.d:ro
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+     - ./nginx/registry.conf:/etc/nginx/conf.d/registry.conf:ro
+   restart: always
 
-registry:
-    image: registry:2.5
-    ports:
-      - 127.0.0.1:5000:5000
+
+registry_auth:
+    image: registry:2.5.0
     environment:
-      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
     volumes:
-      - ./data:/data
-
+      - ./config.yml:/etc/docker/registry/config.yml
+      - ./data:/var/lib/registry
+    restart: always
