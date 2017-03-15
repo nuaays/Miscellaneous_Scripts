@@ -1,0 +1,22 @@
+Port _SSH_PORT_
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+
+AuthorizedKeysFile	.ssh/authorized_keys
+ChallengeResponseAuthentication no
+GSSAPIAuthentication yes
+GSSAPICleanupCredentials yes
+
+UsePAM yes
+X11Forwarding yes
+UsePrivilegeSeparation sandbox		# Default for new installations.
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+Subsystem	sftp	/usr/libexec/openssh/sftp-server
+
+UseDNS no
+AddressFamily inet
+PermitRootLogin yes
+SyslogFacility AUTHPRIV
+PasswordAuthentication yes
