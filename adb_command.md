@@ -48,6 +48,7 @@ adb shell getprop ro.build.version.sdk
 ```
 /data/anr/trace.txt
 ```
+
 * adb logcat
 ```
 senya:~ root# adb logcat -g
@@ -60,6 +61,7 @@ adb logcat | grep Wifi
 ```
 
 * adb pull/push
+
 ```
 adb pull /data/app/xxxx.apk .
 adb push xxxx /data/app/xxx.apk
@@ -74,6 +76,7 @@ adb install -r xxx.apk
 * adb bugreport
 
 * adb screencap
+
 ```
 adb shell screencap -p /data/screen.png
 adb pull /sdcard/screen.png
@@ -85,6 +88,7 @@ adb shell screencap -p | sed 's/\r$//' > screen.png
 ```
 
 * battery and power
+
 ```
 root@android:/ # dumpsys battery
 Current Battery Service state:
@@ -141,6 +145,7 @@ Name : 应用程序名称
 ```
 
 * adb dumpsys
+
 ```
 adb shell dumpsys meminfo <package_name>
 
@@ -192,6 +197,7 @@ Uptime: 14224624 Realtime: 316325823
 
 
 * adb shell procrank
+
 ```
 可以看到，在Linux下表示内存的耗用情况有四种不同的表现形式：
  VSS - Virtual Set Size 虚拟耗用内存（包含共享库占用的内存）
