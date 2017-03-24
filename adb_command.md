@@ -10,6 +10,7 @@ adb remount
 * adb devices
 
 * adb root
+
 * adb -s XXX shell
 ```
 adb -s xx shell 'xxx'
@@ -33,21 +34,25 @@ adb -s 724e5658 shell ls /system/lib
 ``
 
 * 获取系统版本
+
 ```
 adb shell getprop ro.build.version.release
 4.0.4
 ```
 
 * 获取系统api版本
+
 ```
 adb shell getprop ro.build.version.sdk
 15
 ```
 
 * kill -3 $PID
-```
+···
 /data/anr/trace.txt
 ```
+
+
 
 * adb logcat
 ```
